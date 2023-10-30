@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Shader.h"
 
 Shader* Shader::m_instance = nullptr;
@@ -76,28 +76,28 @@ void Shader::CompileShaders() {
 	m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-	// ½¦ÀÌ´õ ¼Ò½ºÄÚµå ºÒ·¯¿À±â
+	// ì‰ì´ë” ì†ŒìŠ¤ì½”ë“œ ë¶ˆëŸ¬ì˜¤ê¸°
 	glShaderSource(m_vertexShader, 1, &m_vertexShaderFileContents, NULL);
 	glShaderSource(m_fragmentShader, 1, &m_fragmentShaderFileContents, NULL);
 
-	// ½¦ÀÌ´õ ÄÄÆÄÀÏ
+	// ì‰ì´ë” ì»´íŒŒì¼
 	glCompileShader(m_vertexShader);
 	glCompileShader(m_fragmentShader);
 
-	// ½¦ÀÌ´õ ÄÄÆÄÀÏ ¿©ºÎ È®ÀÎ
+	// ì‰ì´ë” ì»´íŒŒì¼ ì—¬ë¶€ í™•ì¸
 	int result{ };
 	char errLog[BUFSIZ]{ };
 
 	glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &result);
 	if (!result) {
 		glGetShaderInfoLog(m_vertexShader, sizeof(errLog), NULL, errLog);
-		throw std::string{ "vertex shader ÄÄÆÄÀÏ ¿¡·¯: " + std::string{ errLog } };
+		throw std::string{ "vertex shader ì»´íŒŒì¼ ì—ëŸ¬: " + std::string{ errLog } };
 	}
 
 	glGetShaderiv(m_fragmentShader, GL_COMPILE_STATUS, &result);
 	if (!result) {
 		glGetShaderInfoLog(m_fragmentShader, sizeof(errLog), NULL, errLog);
-		throw std::string{ "fragment shader ÄÄÆÄÀÏ ¿¡·¯: " + std::string{ errLog } };
+		throw std::string{ "fragment shader ì»´íŒŒì¼ ì—ëŸ¬: " + std::string{ errLog } };
 	}
 }
 
@@ -105,10 +105,10 @@ void Shader::AttachAndLinkShaders() {
 	glAttachShader(m_shaderProgram, m_vertexShader);
 	glAttachShader(m_shaderProgram, m_fragmentShader);
 
-	// ½¦ÀÌ´õ ¸µÅ©
+	// ì‰ì´ë” ë§í¬
 	glLinkProgram(m_shaderProgram);
 
-	// ½¦ÀÌ´õµéÀÌ Á¦´ë·Î ¸µÅ© µÇ¾ú´ÂÁö È®ÀÎ
+	// ì‰ì´ë”ë“¤ì´ ì œëŒ€ë¡œ ë§í¬ ë˜ì—ˆëŠ”ì§€ í™•ì¸
 	int result{ };
 	glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &result);
 	if (!result) {

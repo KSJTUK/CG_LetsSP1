@@ -1,7 +1,11 @@
 ﻿#include "pch.h"
 #include "Game.h"
 #include "callbacks.h"
-#include "Shader.h"
+#include "Graphics.h"
+
+Game::Game() { }
+
+Game::~Game() { }
 
 void Game::Init(int* argc, char** argv) {
 	// 윈도우 정보 설정
@@ -38,12 +42,13 @@ void Game::Init(int* argc, char** argv) {
 	//((bool(__stdcall*)(int))wglGetProcAddress("wglSwapIntervalEXT"))(0); // 수직 동기화
 
 	// 이곳에서 각종 변수들 초기화
-	SHADER->Init();
+	m_graphicsComponent = std::make_unique<Graphics>();
+	m_graphicsComponent->Init();
 }
 
 
 void Game::Update() {
-
+	m_graphicsComponent->Update(0.f);
 }
 
 void Game::Render() {
@@ -51,6 +56,7 @@ void Game::Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// 렌더링 코드
+	m_graphicsComponent->Render();
 
 	glutSwapBuffers();
 }

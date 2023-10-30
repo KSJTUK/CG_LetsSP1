@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 
 class Shader {
 private:
 	Shader();
 	~Shader();
 
-// static ¸â¹öµé
+// static ë©¤ë²„ë“¤
 private:
 	static Shader* m_instance;
 
@@ -18,7 +18,7 @@ private:
 	uint32 m_fragmentShader{ };
 	uint32 m_vertexShader{ };
 
-	// ½¦ÀÌ´õ ÆÄÀÏÀÇ ³»¿ëÀ» ÀúÀåÇÒ º¯¼ö
+	// ì‰ì´ë” íŒŒì¼ì˜ ë‚´ìš©ì„ ì €ì¥í•  ë³€ìˆ˜
 	char* m_vertexShaderFileContents{ };
 	char* m_fragmentShaderFileContents{ };
 
@@ -26,27 +26,27 @@ public:
 	void Init();
 
 public:
-	// ½¦ÀÌ´õ ÆÄÀÏ ³»¿ëÀ» ºÒ·¯¿À´Â ÇÔ¼ö
+	// ì‰ì´ë” íŒŒì¼ ë‚´ìš©ì„ ë¶ˆëŸ¬ì˜¤ëŠ” í•¨ìˆ˜
 	void RoadVertexShaderFile(const char* filePath);
 	void RoadFragmentShaderFile(const char* filePaht);
 
-	// ½¦ÀÌ´õ ÀÛ¼º ÇÔ¼öµé
+	// ì‰ì´ë” ì‘ì„± í•¨ìˆ˜ë“¤
 	void CompileShaders();
 	void AttachAndLinkShaders();
 	void CreateShaderProgram();
 
-	// program »ç¿ë
+	// program ì‚¬ìš©
 	void UseProgram();
 	void UnUseProgram();
 
-	// ºäº¯È¯ Çà·Ä ¼¼ÆÃ ÇÔ¼ö
+	// ë·°ë³€í™˜ í–‰ë ¬ ì„¸íŒ… í•¨ìˆ˜
 	void SetViewMat(const glm::mat4& viewMat);
 
-	// Åõ¿µº¯È¯ Çà·Ä ¼¼ÆÃ ÇÔ¼ö
+	// íˆ¬ì˜ë³€í™˜ í–‰ë ¬ ì„¸íŒ… í•¨ìˆ˜
 	void SetPerspectiveMat(const glm::mat4& perspectiveMat);
 
 public:
-	// Getter ÇÔ¼öµé
+	// Getter í•¨ìˆ˜ë“¤
 	unsigned int GetShaderProgramID() const { return m_shaderProgram; }
 };
 

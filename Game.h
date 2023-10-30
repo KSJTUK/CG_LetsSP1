@@ -2,8 +2,8 @@
 
 class Game {
 public:
-	Game() { }
-	~Game() { } 
+	Game();
+	~Game();
 
 	Game(const Game&) = delete;
 	Game& operator=(const Game&) = delete;
@@ -14,6 +14,8 @@ private:
 	int32 m_mousePrevPos[2]{ };
 
 	float3 m_backGroundColor{ 0.5f, 0.5f, 0.5f };
+
+	std::unique_ptr<class Graphics> m_graphicsComponent{ };
 
 public:
 	void Init(int* argc, char** argv);
