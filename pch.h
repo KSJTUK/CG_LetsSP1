@@ -1,16 +1,16 @@
-#pragma once
+﻿#pragma once
 
-// gl ���
+// gl 헤더
 #include <gl/glew.h>
 #include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
 
-// glm ���
+// glm 헤더
 #include <gl/glm/glm.hpp>
 #include <gl/glm/gtc/matrix_transform.hpp>
 #include <gl/glm/gtx/vector_angle.hpp>
 
-// STL ���
+// STL 헤더
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -39,9 +39,21 @@ struct FLOAT3 {
 using float2 = FLOAT2;
 using float3 = FLOAT3;
 
+// 정점의 정보를 담을 구조체 정의
 struct Vertex {
 	float3 position;
 	float3 color;
+};
+
+// 생성할 윈도우의 정보를 담을 구조체 정의
+struct WindowInfo {
+	int x;
+	int y;
+	int width;
+	int height;
+	float fWidth;
+	float fHeight;
+	std::string windowTitle;
 };
 
 extern std::unique_ptr<class Game> game;
