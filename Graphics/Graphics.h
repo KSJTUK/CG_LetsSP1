@@ -20,6 +20,13 @@ private:
 	float m_near{ 0.1f };           // 시야 절두체의 가까운 평면과의 거리
 	float m_far{ 1000.f };           // 시야 절두체의 먼 평면과의 거리
 
+	std::vector<Vertex> testV{
+		Vertex{ { 0.f, 400.f, 0.f }, { 0.f, 1.f, 0.f }},
+		Vertex{ { -400.f, -400.f, 0.f }, { 1.f, 0.f, 0.f }},
+		Vertex{ { 400.f, -400.f, 0.f }, { 0.f, 0.f, 1.f}},
+	};
+	std::unique_ptr<class GraphicBuffers> testBuffer{ };
+
 public:
 	// getter
 	bool IsInited() const;

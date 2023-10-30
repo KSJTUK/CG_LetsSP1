@@ -21,7 +21,7 @@ void Game::Init(int* argc, char** argv) {
 	glutInit(argc, argv);
 
 	// 윈도우 출력모드 설정(더블버퍼링, RGBA, 깊이버퍼)
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	// 윈도우 크기, 좌표 설정
 	glutInitWindowPosition(m_windowInfo.x, m_windowInfo.y);
 	glutInitWindowSize(m_windowInfo.width, m_windowInfo.height);
@@ -37,13 +37,14 @@ void Game::Init(int* argc, char** argv) {
 		exit(-1);
 	}
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 
 	//((bool(__stdcall*)(int))wglGetProcAddress("wglSwapIntervalEXT"))(0); // 수직 동기화
 
 	// 이곳에서 각종 변수들 초기화
 	m_graphicsComponent = std::make_unique<Graphics>();
 	m_graphicsComponent->Init();
+	m_graphicsComponent->SetWindowInfo(m_windowInfo);
 }
 
 
@@ -67,6 +68,7 @@ void Game::ResizeWindow(int x, int y) {
 	m_windowInfo.fWidth = static_cast<float>(m_windowInfo.width);
 	m_windowInfo.fHeight = static_cast<float>(m_windowInfo.height);
 
+	m_graphicsComponent->SetWindowInfo(m_windowInfo);
 	glViewport(0, 0, x, y);
 }
 

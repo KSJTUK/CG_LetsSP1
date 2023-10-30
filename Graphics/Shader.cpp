@@ -118,8 +118,8 @@ void Shader::AttachAndLinkShaders() {
 
 void Shader::CreateShaderProgram() {
 	m_shaderProgram = glCreateProgram();
-	RoadVertexShaderFile(".\\Graphics\\Shader\\vertex_shader.glsl");
-	RoadFragmentShaderFile(".\\Graphics\\Shader\\fragment_shader.glsl");
+	RoadVertexShaderFile(".\\Shader\\vertex_shader.glsl");
+	RoadFragmentShaderFile(".\\Shader\\fragment_shader.glsl");
 	CompileShaders();
 	AttachAndLinkShaders();
 }

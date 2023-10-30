@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "Graphics.h"
+#include "GraphicBuffer.h"
 #include "Shader.h"
 
 Graphics::Graphics() { }
@@ -32,12 +33,16 @@ void Graphics::SetPerspectiveMat() {
 void Graphics::Init() {
 	SHADER->Init();
 
-	SHADER->UseProgram();
-
 	// 투영 변환 행렬 계산 및 전송
 	SetPerspectiveMat();
 
-	SHADER->SetViewMat(glm::mat4{ 1.f });
+	SHADER->UseProgram();
+	SHADER->SetViewMat(glm::lookAt(glm::vec3{ 0.f, 0.f, 1000.f }, glm::vec3{ 0.f, 0.f, 1.f }, glm::vec3{ 0.f, 1.f, 0.f }));
+
+	testBuffer = std::make_unique<GraphicBuffers>();
+	testBuffer->Init();
+	testBuffer->SetVerticies(testV);
+	testBuffer->SetTransformMat(glm::mat4{ 1.f });
 
 	// 쉐이더 프로그램 사용 종료
 	SHADER->UnUseProgram();
@@ -52,7 +57,8 @@ void Graphics::Update(float deltaTime) {
 void Graphics::Render() {
 	SHADER->UseProgram();
 
-	glViewport(0, 0, m_windowInfo.width, m_windowInfo.height);
+	testBuffer->SetTransformMat(glm::mat4{ 1.f });
+	testBuffer->Render();
 
 	SHADER->UnUseProgram();
 }
