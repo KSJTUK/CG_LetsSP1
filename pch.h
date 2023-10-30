@@ -49,8 +49,8 @@ struct Vertex {
 struct WindowInfo {
 	int x;
 	int y;
-	int width;
-	int height;
+	uint32 width;
+	uint32 height;
 	float fWidth;
 	float fHeight;
 	std::string windowTitle;
