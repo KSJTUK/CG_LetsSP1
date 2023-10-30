@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Game.h"
-#include "callbacks.h"
-#include "Graphics.h"
+#include "Utils\callbacks.h"
+#include "Graphics\Graphics.h"
 
 Game::Game() { }
 

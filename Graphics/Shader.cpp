@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "Shader.h"
+#include "Graphics\Shader.h"
 
 Shader* Shader::m_instance = nullptr;
 
@@ -118,8 +118,8 @@ void Shader::AttachAndLinkShaders() {
 
 void Shader::CreateShaderProgram() {
 	m_shaderProgram = glCreateProgram();
-	RoadVertexShaderFile("vertex_shader.glsl");
-	RoadFragmentShaderFile("fragment_shader.glsl");
+	RoadVertexShaderFile(".\\Graphics\\Shader\\vertex_shader.glsl");
+	RoadFragmentShaderFile(".\\Graphics\\Shader\\fragment_shader.glsl");
 	CompileShaders();
 	AttachAndLinkShaders();
 }
