@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Game.h"
 #include "callbacks.h"
+#include "Shader.h"
 
 void Game::Init(int* argc, char** argv) {
 	// 윈도우 정보 설정
@@ -35,6 +36,9 @@ void Game::Init(int* argc, char** argv) {
 	glEnable(GL_DEPTH_TEST);
 
 	//((bool(__stdcall*)(int))wglGetProcAddress("wglSwapIntervalEXT"))(0); // 수직 동기화
+
+	// 이곳에서 각종 변수들 초기화
+	SHADER->Init();
 }
 
 

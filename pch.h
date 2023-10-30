@@ -7,7 +7,9 @@
 
 // glm 헤더
 #include <gl/glm/glm.hpp>
+#include <gl/glm/ext.hpp>
 #include <gl/glm/gtc/matrix_transform.hpp>
+#include <gl/glm/gtx/euler_angles.hpp>
 #include <gl/glm/gtx/vector_angle.hpp>
 
 // STL 헤더
@@ -55,5 +57,8 @@ struct WindowInfo {
 	float fHeight;
 	std::string windowTitle;
 };
+
+// 싱글톤을 불러오는 GetInstance함수 매크로화
+#define SHADER Shader::GetInstance()
 
 extern std::unique_ptr<class Game> game;
