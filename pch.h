@@ -43,8 +43,8 @@ using float3 = FLOAT3;
 
 // 정점의 정보를 담을 구조체 정의
 struct Vertex {
-	float3 position;
-	float3 color;
+	glm::vec3 position;
+	glm::vec3 color;
 };
 
 // 생성할 윈도우의 정보를 담을 구조체 정의

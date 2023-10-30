@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "GraphicBuffer.h"
 #include "Shader.h"
+#include "Polygon.h"
 
 Graphics::Graphics() { }
 
@@ -37,12 +38,11 @@ void Graphics::Init() {
 	SetPerspectiveMat();
 
 	SHADER->UseProgram();
-	SHADER->SetViewMat(glm::lookAt(glm::vec3{ 0.f, 0.f, 1000.f }, glm::vec3{ 0.f, 0.f, 1.f }, glm::vec3{ 0.f, 1.f, 0.f }));
+	SHADER->SetViewMat(glm::lookAt(m_eye, m_eye + m_at, m_up));
 
-	testBuffer = std::make_unique<GraphicBuffers>();
-	testBuffer->Init();
-	testBuffer->SetVerticies(testV);
-	testBuffer->SetTransformMat(glm::mat4{ 1.f });
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	m_testPoly.push_back(Poly{ });
 
 	// 쉐이더 프로그램 사용 종료
 	SHADER->UnUseProgram();
@@ -57,8 +57,9 @@ void Graphics::Update(float deltaTime) {
 void Graphics::Render() {
 	SHADER->UseProgram();
 
-	testBuffer->SetTransformMat(glm::mat4{ 1.f });
-	testBuffer->Render();
+	for (auto& polygon : m_testPoly) {
+		polygon.Render();
+	}
 
 	SHADER->UnUseProgram();
 }

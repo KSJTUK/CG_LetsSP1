@@ -2,7 +2,7 @@
 #include "GraphicBuffer.h"
 #include "Shader.h"
 
-GraphicBuffers::GraphicBuffers() : m_drawMode{ GL_LINE_LOOP } { }
+GraphicBuffers::GraphicBuffers() : m_drawMode{ GL_TRIANGLE_FAN } { }
 
 GraphicBuffers::~GraphicBuffers() {
 	glDeleteVertexArrays(1, &m_vertexArray);
