@@ -44,6 +44,34 @@ void Graphics::Init() {
 
 	m_testPoly.push_back(Poly{ });
 
+	std::pair<glm::vec2, glm::vec2> testLine{ { -400, 300.f }, { 400.f, -300.f } };
+	std::pair<glm::vec2, glm::vec2> t{ { -400, -300.f }, { 400.f, 300.f } };
+
+	std::vector<Poly> tempVec{ };
+	for (auto& poly : m_testPoly) {
+		Poly temp{ };
+		if (!poly.CutPolygon(testLine, temp)) {
+			continue;
+		}
+		tempVec.push_back(temp);
+	}
+
+	if (!tempVec.empty()) {
+		m_testPoly.insert(m_testPoly.end(), tempVec.begin(), tempVec.end());
+	}
+
+	for (auto& poly : m_testPoly) {
+		Poly temp{ };
+		if (!poly.CutPolygon(t, temp)) {
+			continue;
+		}
+		tempVec.push_back(temp);
+	}
+
+	if (!tempVec.empty()) {
+		m_testPoly.insert(m_testPoly.end(), tempVec.begin(), tempVec.end());
+	}
+
 	// 쉐이더 프로그램 사용 종료
 	SHADER->UnUseProgram();
 
