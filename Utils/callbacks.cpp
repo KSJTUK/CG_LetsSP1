@@ -36,7 +36,11 @@ void keyboardUpFunc(unsigned char key, int x, int y)
 
 void mouseFunc(int button, int state, int x, int y)
 {
-
+	if (button == GLUT_LEFT_BUTTON) {
+		if (state == GLUT_UP) {
+			game->MouseUp(x, y);
+		}
+	}
 }
 
 void mouseLeftDown(int state, int x, int y)

@@ -1,11 +1,19 @@
 ﻿#include "pch.h"
 #include "Game.h"
 #include "Utils\callbacks.h"
+#include "Graphics\Shader.h"
 #include "Graphics\Graphics.h"
+#include "Graphics\GraphicBuffer.h"
+#include "Line.h"
 
 Game::Game() { }
 
-Game::~Game() { }
+Game::~Game() {
+	if (m_mouseLine) {
+		delete m_mouseLine;
+		m_mouseLine = nullptr;
+	}
+}
 
 void Game::Init(int* argc, char** argv) {
 	// 윈도우 정보 설정
@@ -41,6 +49,7 @@ void Game::Init(int* argc, char** argv) {
 
 	//((bool(__stdcall*)(int))wglGetProcAddress("wglSwapIntervalEXT"))(0); // 수직 동기화
 
+
 	// 이곳에서 각종 변수들 초기화
 	m_graphicsComponent = std::make_unique<Graphics>();
 	m_graphicsComponent->Init();
@@ -57,7 +66,13 @@ void Game::Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// 렌더링 코드
+	SHADER->UseProgram();
 	m_graphicsComponent->Render();
+
+	if (m_mouseLine) {
+		m_mouseLine->Render();
+	}
+	SHADER->UnUseProgram();
 
 	glutSwapBuffers();
 }
@@ -77,13 +92,36 @@ void Game::Input(unsigned char key, bool down) {
 }
 
 void Game::MouseMotion(int x, int y) {
-	m_mousePrevPos[0] = x;
-	m_mousePrevPos[1] = y;
+	if (!m_mouseLine) {
+		m_mouseLine = new Line{ std::pair<glm::vec3, glm::vec3>{ m_mousePrevPos, m_mouseCurPos }, m_mouseLineColor };
+	}
+
+	float halfW{ static_cast<float>(m_windowInfo.width) / 2.f }, halfH{ static_cast<float>(m_windowInfo.height) / 2.f };
+	float mouseX{ static_cast<float>(x) - halfW }, mouseY{ static_cast<float>(-y) + halfH };
+
+	m_mouseCurPos = glm::vec3{ mouseX, mouseY - 75.f, 0.f };
+	m_mouseLine->Update(m_mouseCurPos);
 }
 
 void Game::MousePassiveMotion(int x, int y) {
-	m_mousePrevPos[0] = x;
-	m_mousePrevPos[1] = y;
+	float halfW{ static_cast<float>(m_windowInfo.width) / 2.f }, halfH{ static_cast<float>(m_windowInfo.height) / 2.f };
+	float mouseX{ static_cast<float>(x) - halfW }, mouseY{ static_cast<float>(-y) + halfH };
+
+	m_mousePrevPos = glm::vec3{ mouseX, mouseY - 75.f, 0.f };
+	m_mouseCurPos = m_mousePrevPos;
+}
+
+void Game::MouseUp(int x, int y) {
+	if (m_mouseLine) {
+		delete m_mouseLine;
+		m_mouseLine = nullptr;
+	}
+
+	float halfW{ static_cast<float>(m_windowInfo.width) / 2.f }, halfH{ static_cast<float>(m_windowInfo.height) / 2.f };
+	float mouseX{ static_cast<float>(x) - halfW }, mouseY{ static_cast<float>(-y) + halfH };
+
+	glm::vec2 start{ m_mousePrevPos }, end{ m_mouseCurPos };
+	m_graphicsComponent->MouseUp(std::pair<glm::vec2, glm::vec2>{ start, end });
 }
 
 void Game::Loop() {

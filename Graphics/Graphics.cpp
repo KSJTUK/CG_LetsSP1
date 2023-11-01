@@ -31,6 +31,23 @@ void Graphics::SetPerspectiveMat() {
 	SHADER->UnUseProgram();
 }
 
+void Graphics::MouseUp(const std::pair<glm::vec2, glm::vec2>&& mouseScreenCoord) {
+	std::vector<Poly> tempVec{ };
+	for (auto& poly : m_testPoly) {
+		Poly temp{ };
+		if (!poly.CutPolygon(mouseScreenCoord, temp)) {
+			continue;
+		}
+		tempVec.push_back(temp);
+	}
+
+	if (!tempVec.empty()) {
+		for (auto& poly : tempVec) {
+			m_testPoly.push_back(poly);
+		}
+	}
+}
+
 void Graphics::Init() {
 	SHADER->Init();
 
@@ -44,33 +61,6 @@ void Graphics::Init() {
 
 	m_testPoly.push_back(Poly{ });
 
-	std::pair<glm::vec2, glm::vec2> testLine{ { -400, 300.f }, { 400.f, -300.f } };
-	std::pair<glm::vec2, glm::vec2> t{ { -400, -300.f }, { 400.f, 300.f } };
-
-	std::vector<Poly> tempVec{ };
-	for (auto& poly : m_testPoly) {
-		Poly temp{ };
-		if (!poly.CutPolygon(testLine, temp)) {
-			continue;
-		}
-		tempVec.push_back(temp);
-	}
-
-	if (!tempVec.empty()) {
-		m_testPoly.insert(m_testPoly.end(), tempVec.begin(), tempVec.end());
-	}
-
-	for (auto& poly : m_testPoly) {
-		Poly temp{ };
-		if (!poly.CutPolygon(t, temp)) {
-			continue;
-		}
-		tempVec.push_back(temp);
-	}
-
-	if (!tempVec.empty()) {
-		m_testPoly.insert(m_testPoly.end(), tempVec.begin(), tempVec.end());
-	}
 
 	// 쉐이더 프로그램 사용 종료
 	SHADER->UnUseProgram();
@@ -83,11 +73,7 @@ void Graphics::Update(float deltaTime) {
 }
 
 void Graphics::Render() {
-	SHADER->UseProgram();
-
 	for (auto& polygon : m_testPoly) {
 		polygon.Render();
 	}
-
-	SHADER->UnUseProgram();
 }

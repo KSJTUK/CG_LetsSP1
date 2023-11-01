@@ -27,6 +27,7 @@ private:
 
 	std::vector<class Poly> m_testPoly{ };
 
+
 public:
 	// getter
 	bool IsInited() const;
@@ -34,6 +35,8 @@ public:
 	// setter
 	void SetWindowInfo(const WindowInfo& winInfo);
 	void SetPerspectiveMat();
+
+	void MouseUp(const std::pair<glm::vec2, glm::vec2>&& mouseScreenCoord);
 
 public:
 	void Init();

@@ -21,6 +21,7 @@
 #include <sstream>
 #include <memory>
 #include <algorithm>
+#include <functional>
 
 using int32 = __int32;
 using int64 = __int64;

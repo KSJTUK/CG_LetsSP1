@@ -8,28 +8,37 @@ public:
 
 private:
 	// Vertex Buffer Object ID
-	uint32 m_vertexBuffer{ };
+	unsigned int m_vertexBuffer{ };
 
 	// Vertex Array Object ID
-	uint32 m_vertexArray{ };
+	unsigned int m_vertexArray{ };
+
+	// Element Buffer OBject ID
+	unsigned int m_elementBuffer{ };
 
 	size_t m_vertexDataSize{ };
 	size_t m_indexDataSize{ };
 
 	// 그리기 모드 점, 선, 삼각형 등
 	// default값은 삼각형(생성자에서 설정)
-	uint32 m_drawMode{ };
+	unsigned int m_drawMode{ };
 
 	// 모델 변환 행렬 변수의 위치 저장
-	uint32 m_modelTransformLocation{ };
+	unsigned int m_modelTransformLocation{ };
 
 public:
 	void Init();
 
 	void SetTransformMat(glm::mat4& trans);
+
 	void SetTransformMat(glm::mat4&& trans);
 
+	void SetVerticies(const Vertex* verticies, unsigned int dataSize);
 	void SetVerticies(const std::vector<Vertex>& verticies);
 
+	void SetIndexBuffer(unsigned int* indexBuffer, size_t bufferSize);
+	void SetIndexBuffer(const std::vector<unsigned int>& indicies);
+
+	void SetDrawMode(unsigned int mode);
 	void Render();
 };

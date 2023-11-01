@@ -11,7 +11,11 @@ public:
 private:
 	WindowInfo m_windowInfo{ };
 
-	int32 m_mousePrevPos[2]{ };
+	glm::vec3 m_mouseCurPos{ };
+	glm::vec3 m_mousePrevPos{ };
+	glm::vec3 m_mouseLineColor{ 1.f, 0.f, 0.f };
+
+	class Line* m_mouseLine{ };
 
 	float3 m_backGroundColor{ 0.5f, 0.5f, 0.5f };
 
@@ -27,6 +31,7 @@ public:
 	void Input(unsigned char key, bool down);
 	void MouseMotion(int x, int y);
 	void MousePassiveMotion(int x, int y);
+	void MouseUp(int x, int y);
 
 	void Loop();
 
