@@ -45,6 +45,8 @@ public:
 	// 투영변환 행렬 세팅 함수
 	void SetPerspectiveMat(const glm::mat4& perspectiveMat);
 
+	void SetUniformVec3(const glm::vec3& vector);
+
 public:
 	// Getter 함수들
 	unsigned int GetShaderProgramID() const { return m_shaderProgram; }

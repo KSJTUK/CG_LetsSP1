@@ -17,6 +17,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <list>
 #include <utility>
 #include <sstream>
 #include <memory>

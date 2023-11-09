@@ -133,7 +133,7 @@ void Shader::UnUseProgram() {
 }
 
 void Shader::SetViewMat(const glm::mat4& viewMat) {
-	unsigned int viewMatLocation = glGetUniformLocation(m_shaderProgram, "viewMat");
+	int viewMatLocation = glGetUniformLocation(m_shaderProgram, "viewMat");
 	if (viewMatLocation == -1) {
 		assert(0);
 	}
@@ -141,9 +141,17 @@ void Shader::SetViewMat(const glm::mat4& viewMat) {
 }
 
 void Shader::SetPerspectiveMat(const glm::mat4& perspectiveMat) {
-	unsigned int perspectiveMatLocation = glGetUniformLocation(m_shaderProgram, "perspectiveMat");
+	int perspectiveMatLocation = glGetUniformLocation(m_shaderProgram, "perspectiveMat");
 	if (perspectiveMatLocation == -1) {
 		assert(0);
 	}
 	glUniformMatrix4fv(perspectiveMatLocation, 1, GL_FALSE, glm::value_ptr(perspectiveMat));
+}
+
+void Shader::SetUniformVec3(const glm::vec3& vector) {
+	int viewMatLocation = glGetUniformLocation(m_shaderProgram, "objectCOlor");
+	if (viewMatLocation == -1) {
+		assert(0);
+	}
+	glUniform3fv(viewMatLocation, 1, glm::value_ptr(vector));
 }

@@ -26,11 +26,33 @@ Poly::Poly() {
 
 Poly::~Poly() { }
 
+Poly::Poly(int vertexCount) {
+	m_graphicBuffer = std::make_unique<GraphicBuffers>();
+	m_graphicBuffer->Init();
+
+	uint32 vertexSize{ static_cast<uint32>(vertexCount) };
+
+	glm::vec3 firstPos{ -100.f, -100.f, 0.f };
+	glm::vec3 randColor{ glm::linearRand(glm::vec3{ 0.f }, glm::vec3{ 1.f }) };
+
+	float addAngle = 360.f / static_cast<float>(vertexSize);
+	float angle = 0.f;
+	for (decltype(vertexSize) i = 0; i < vertexSize; ++i) {
+		glm::vec3 rotPos{ glm::rotate(firstPos, glm::radians(angle), glm::vec3{ 0.f, 0.f, 1.f }) };
+		m_verticies.push_back(Vertex{ rotPos, randColor });
+		angle += addAngle;
+		m_indicies.push_back(i);
+	}
+	m_graphicBuffer->SetVerticies(m_verticies);
+	m_graphicBuffer->SetIndexBuffer(m_indicies);
+	m_graphicBuffer->SetTransformMat(glm::mat4{ 1.f });
+}
+
 Poly::Poly(const std::vector<glm::vec3> otherVertex, const glm::vec3& color) {
 	m_graphicBuffer = std::make_unique<GraphicBuffers>();
 	m_graphicBuffer->Init(); 
 
-	auto endLoop{ otherVertex.size() };
+	uint64 endLoop{ otherVertex.size() };
 	for (decltype(endLoop) i = 0; i < endLoop; ++i) {
 		m_verticies.push_back(Vertex{ otherVertex[i], color });
 		m_indicies.push_back(i);
@@ -121,44 +143,9 @@ void Poly::SortCCW(std::vector<glm::vec3>& verticies) {
 }
 
 bool Poly::CutPolygon(const std::pair<glm::vec2, glm::vec2>& line, Poly& newPoly) {
-	glm::vec2 start{ m_verticies[0].position };
-	auto endLoop{ m_verticies.size() };
-
-	std::vector<int> intersectionIndex{ };
 
 	std::vector<glm::vec3> resultVector{ };
-	for (decltype(endLoop) i = 1; i < endLoop; ++i) {
-		glm::vec2 end{ m_verticies[i].position };
-
-		// 만약 만나는 점이 있다면
-		glm::vec3 result{ };
-		std::pair<glm::vec2, glm::vec2> polygonLine{ start, end };
-		if (!GetIntersectionPoint(start, end, line.first, line.second, result)) {
-			// 마지막 라인을 검사했는데 교차하지 않는경우 이후 검사는 할 필요가 없음
-			if (i == endLoop - 1) {
-				break;
-			}
-		}
-		else {
-			// 교차 점이 있다면 추가
-			resultVector.push_back(result);
-		}
-
-		// 정점들이 만드는 라인을 검사하는데 FAN으로 그리고 있어서 첫번째 정점과의 직선만 검사하고 있음
-		// 따라서 아래에 있는 정점들 간의 직선에 대해서도 추가로 교차 검사를 해줌
-		if (i < endLoop - 1) {
-			glm::vec2 bottomStart{ m_verticies[i].position };
-			glm::vec3 bottomEnd = m_verticies[i + 1].position;
-			glm::vec3 bottomResult{ };
-			decltype(polygonLine) bottomPolygonLine = { bottomStart, bottomEnd };
-			if (!GetIntersectionPoint(bottomStart, bottomEnd, line.first, line.second, bottomResult)) {
-				continue;
-			}
-
-			resultVector.push_back(bottomResult);
-		}
-	}
-
+	CheckIntersectLine(line, resultVector);
 
 
 	if (resultVector.size() <= 1) {
@@ -171,42 +158,13 @@ bool Poly::CutPolygon(const std::pair<glm::vec2, glm::vec2>& line, Poly& newPoly
 	std::vector<glm::vec3> ccwPoints{ };
 	std::vector<uint32> ccwIndex{ };
 
-	CW_CCWLinePoint(line, m_verticies, cwPoints, ccwPoints, cwIndex, ccwIndex);
+	PartitionLinePointCCW(line, m_verticies, cwPoints, ccwPoints, cwIndex, ccwIndex);
 
-	if (IsCWPoint(line, m_verticies[0])) {
-		cwPoints.insert(cwPoints.end(), resultVector.begin(), resultVector.end());
-		ccwPoints.insert(ccwPoints.end(), resultVector.begin(), resultVector.end());
-
-		glm::vec3 color{ m_verticies[0].color };
-		m_verticies.clear();
-		for (auto& point : cwPoints) {
-			m_verticies.push_back(Vertex{ point, glm::vec3{ 0.f, 0.f, 1.f } });
-		}
-
-		SortCCW(m_verticies);
-		SortCCW(ccwPoints);
-
-		newPoly = Poly{ ccwPoints, glm::vec3{ 1.f, 0.f, 0.f } };
-	}
-	else {
-		cwPoints.insert(cwPoints.end(), resultVector.begin(), resultVector.end());
-		ccwPoints.insert(ccwPoints.end(), resultVector.begin(), resultVector.end());
-
-		glm::vec3 color{ m_verticies[0].color };
-		m_verticies.clear();
-		for (auto& point : ccwPoints) {
-			m_verticies.push_back(Vertex{ point, glm::vec3{ 0.f, 0.f, 1.f } });
-		}
-
-		SortCCW(m_verticies);
-		SortCCW(cwPoints);
-
-		newPoly = Poly{ cwPoints, glm::vec3{ 1.f, 0.f, 0.f } };
-	}
+	newPoly = MergePartitionPoints(line, cwPoints, ccwPoints, resultVector);
 
 	m_indicies.clear();
-	auto endLoop2{ m_verticies.size() };
-	for (decltype(endLoop) i = 0; i < endLoop2; ++i) {
+	uint64 endLoop{ m_verticies.size() };
+	for (decltype(endLoop) i = 0; i < endLoop; ++i) {
 		m_indicies.push_back(i);
 	}
 
@@ -251,7 +209,39 @@ bool Poly::CCW(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3) {
 	}
 }
 
-void Poly::CW_CCWLinePoint(const std::pair<glm::vec2, glm::vec2>& line, std::vector<Vertex>& points,
+void Poly::CheckIntersectLine(const std::pair<glm::vec2, glm::vec2>& line, std::vector<glm::vec3>& resultPoints) {
+	glm::vec2 start{ m_verticies[0].position };
+	uint64 endLoop{ m_verticies.size() };
+
+	for (decltype(endLoop) i = 1; i < endLoop; ++i) {
+		glm::vec2 end{ m_verticies[i].position };
+		glm::vec3 result{ };
+
+		std::pair<glm::vec2, glm::vec2> polygonLine{ start, end };
+		if (!GetIntersectionPoint(start, end, line.first, line.second, result)) {
+			if (i == endLoop - 1) {
+				break;
+			}
+		}
+		else {
+			resultPoints.push_back(result);
+		}
+
+		if (i < endLoop - 1) {
+			glm::vec2 bottomStart{ m_verticies[i].position };
+			glm::vec3 bottomEnd = m_verticies[i + 1].position;
+			glm::vec3 bottomResult{ };
+			decltype(polygonLine) bottomPolygonLine = { bottomStart, bottomEnd };
+			if (!GetIntersectionPoint(bottomStart, bottomEnd, line.first, line.second, bottomResult)) {
+				continue;
+			}
+
+			resultPoints.push_back(bottomResult);
+		}
+	}
+}
+
+void Poly::PartitionLinePointCCW(const std::pair<glm::vec2, glm::vec2>& line, std::vector<Vertex>& points,
 	std::vector<glm::vec3>& cwPoints, std::vector<glm::vec3>& ccwPoints, std::vector<uint32>& cwIndex, std::vector<uint32>& ccwIndex) {
 	
 	auto endLoop{ points.size() };
@@ -268,6 +258,43 @@ void Poly::CW_CCWLinePoint(const std::pair<glm::vec2, glm::vec2>& line, std::vec
 			ccwPoints.push_back(points[i].position);
 			ccwIndex.push_back(i);
 		}
+	}
+}
+
+Poly Poly::MergePartitionPoints(const std::pair<glm::vec2, glm::vec2>& line, std::vector<glm::vec3>& cwPoints, std::vector<glm::vec3>& ccwPoints,
+	std::vector<glm::vec3>& resultPoints) {
+	Poly newPoly{ };
+	if (IsCWPoint(line, m_verticies[0])) {
+		cwPoints.insert(cwPoints.end(), resultPoints.begin(), resultPoints.end());
+		ccwPoints.insert(ccwPoints.end(), resultPoints.begin(), resultPoints.end());
+
+		glm::vec3 color{ m_verticies[0].color };
+		m_verticies.clear();
+		for (auto& point : cwPoints) {
+			m_verticies.push_back(Vertex{ point, glm::vec3{ 0.f, 0.f, 1.f } });
+		}
+
+		SortCCW(m_verticies);
+		SortCCW(ccwPoints);
+
+		Poly newPoly{ Poly{ ccwPoints, glm::vec3{ 1.f, 0.f, 0.f } } };
+		return newPoly;
+	}
+	else {
+		cwPoints.insert(cwPoints.end(), resultPoints.begin(), resultPoints.end());
+		ccwPoints.insert(ccwPoints.end(), resultPoints.begin(), resultPoints.end());
+
+		glm::vec3 color{ m_verticies[0].color };
+		m_verticies.clear();
+		for (auto& point : ccwPoints) {
+			m_verticies.push_back(Vertex{ point, glm::vec3{ 0.f, 0.f, 1.f } });
+		}
+
+		SortCCW(m_verticies);
+		SortCCW(cwPoints);
+
+		newPoly = Poly{ cwPoints, glm::vec3{ 1.f, 0.f, 0.f } };
+		return newPoly;
 	}
 }
 

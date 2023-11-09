@@ -13,64 +13,101 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\GameFrame">
+      <UniqueIdentifier>{bbd3cada-e769-4cdd-95d4-0da8f6fb2913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameFrame">
+      <UniqueIdentifier>{dc9d3d3a-ef2f-4d8a-bfe4-66a4ac6428af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameFrame\Graphic">
+      <UniqueIdentifier>{62377d0c-e4a8-41c8-87f4-404a157b49d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GameFrame\Graphic">
+      <UniqueIdentifier>{3d224c39-f6b0-41ba-bf68-eed15a739a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GameFrame\Util">
+      <UniqueIdentifier>{bee0ffdc-86fe-4f7e-9cd6-96df1fa825f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameFrame\Util">
+      <UniqueIdentifier>{50126075-b71a-43d6-a360-cbe127a9ef11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object">
+      <UniqueIdentifier>{a333e417-9f4f-424b-b598-43518b9856fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\Shader">
+      <UniqueIdentifier>{80396a41-5603-41db-aaa3-0d82d52bec99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{ed5cfe83-4766-470e-8cb3-ed8ca4081296}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>소스 파일\GameFrame</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\GameFrame</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Graphics.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Shader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\callbacks.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\GameFrame\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\GraphicBuffer.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\GameFrame\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shader.cpp">
+      <Filter>소스 파일\GameFrame\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일\GameFrame\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\callbacks.cpp">
+      <Filter>소스 파일\GameFrame\Util</Filter>
     </ClCompile>
     <ClCompile Include="Polygon.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="Line.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일\GameFrame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Graphics.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\callbacks.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="GameWorld.h">
+      <Filter>헤더 파일\GameFrame</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\GameFrame\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\callbacks.h">
+      <Filter>헤더 파일\GameFrame\Util</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\GraphicBuffer.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\GameFrame\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Graphics\Shader.h">
+      <Filter>헤더 파일\GameFrame\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>헤더 파일\GameFrame</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Graphics.h">
+      <Filter>헤더 파일\GameFrame\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\vertex_shader.glsl" />
-    <None Include="Shader\fragment_shader.glsl" />
+    <None Include="Shader\fragment_shader.glsl">
+      <Filter>리소스 파일\Shader</Filter>
+    </None>
+    <None Include="Shader\vertex_shader.glsl">
+      <Filter>리소스 파일\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
